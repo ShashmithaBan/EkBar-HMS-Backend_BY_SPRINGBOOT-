@@ -4,6 +4,7 @@ import com.ekbar.ekbarhms.Model.Room;
 import com.ekbar.ekbarhms.Request.CreateRoomRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RoomService {
 
@@ -11,7 +12,13 @@ public interface RoomService {
 
     public List<Room> getAllRooms();
 
-    public void updateIsBooked();
+    public Room updateIsBooked(Long id);
 
-    public void deleteRoom();
+    public void deleteRoomById(Long id);
+
+    public Optional<Room> getRoomById(Long id);
+
+    public List<Room> getRoomsByType(String type);
+
+
 }
