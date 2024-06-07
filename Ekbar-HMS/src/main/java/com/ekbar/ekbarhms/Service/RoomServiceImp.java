@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoomServiceImp implements RoomService {
@@ -25,17 +26,45 @@ public class RoomServiceImp implements RoomService {
 
     @Override
     public List<Room> getAllRooms() {
-        return null;
+
+        return roomRepo.findAll();
     }
 
     @Override
-    public void updateIsBooked() {
+    public Room updateIsBooked(Long id)  {
+        Room room = roomRepo.findById(id).orElseThrow(() -> new RuntimeException("Room not found"));
+        room.setBooked(!room.isBooked());
+        return roomRepo.save(room);
+    }
+
+
+@Override
+    public void deleteRoomById(Long id) {
+        Optional<Room> roomOptional = getRoomById(id);
+    roomRepo.delete(roomOptional.get());
+    }
+
+
+    @Override
+    public Optional<Room> getRoomById(Long id) {
+        Optional<Room> room = roomRepo.findById(id);
+        if (room.isPresent()) {
+            return room;
+
+        } else {
+
+            throw new IllegalArgumentException("Room not found with id: " + id);
+        }
 
     }
 
     @Override
-    public void deleteRoom() {
+    public List<Room> getRoomsByType(String type) {
 
+        return roomRepo.findRoomByRoomType(type);
     }
+
+
+
 }
 
