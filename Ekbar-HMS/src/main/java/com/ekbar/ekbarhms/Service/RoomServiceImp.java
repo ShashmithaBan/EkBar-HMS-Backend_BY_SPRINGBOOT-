@@ -39,22 +39,21 @@ public class RoomServiceImp implements RoomService {
 
 
 @Override
-    public void deleteRoomById(Long id) {
-        Optional<Room> roomOptional = getRoomById(id);
-    roomRepo.delete(roomOptional.get());
+    public void deleteRoomById(Long id) throws Exception {
+       Room room = getRoomById(id);
+    roomRepo.delete(room);
     }
 
 
     @Override
-    public Optional<Room> getRoomById(Long id) {
-        Optional<Room> room = roomRepo.findById(id);
-        if (room.isPresent()) {
-            return room;
-
-        } else {
-
-            throw new IllegalArgumentException("Room not found with id: " + id);
+    public Room getRoomById(Long id) throws Exception {
+        Optional<Room> opt = roomRepo.findById(id);
+        if(opt.isEmpty()){
+            throw new Exception("room not found with this id"+id);
         }
+
+        return opt.get();
+
 
     }
 
@@ -64,6 +63,31 @@ public class RoomServiceImp implements RoomService {
         return roomRepo.findRoomByRoomType(type);
     }
 
+    @Override
+    public List<Room> getAllAvailableRooms() {
+        return roomRepo.findByIsBookedFalse();
+    }
+
+    @Override
+    public List<Room> getAllAvailableRoomsWithSpecificRoomType(String type) {
+        return roomRepo.findAvailableRoomsByType(type);
+    }
+
+    @Override
+    public Room updateRoomDetails(CreateRoomRequest req , Long roomId) throws Exception {
+        Room room =getRoomById(roomId);
+        if(room.getRoomPrice()!= null){
+            room.setRoomPrice(req.getRoomPrice());
+        }
+        if(room.getRoomType()!=null){
+            room.setRoomType(req.getRoomType());
+        }
+        if(room.getImages()!=null){
+            room.setImages(req.getImages());
+        }
+        return roomRepo.save(room);
+
+    }
 
 
 }

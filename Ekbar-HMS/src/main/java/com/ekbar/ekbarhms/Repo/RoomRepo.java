@@ -14,4 +14,10 @@ public interface RoomRepo extends JpaRepository<Room,Long> {
     List<Room> findRoomByRoomType(@Param("type") String type);
 
 
+    List<Room> findByIsBookedFalse();
+
+    @Query("SELECT r FROM Room r WHERE r.roomType LIKE %:type% AND r.isBooked = false")
+    List<Room> findAvailableRoomsByType(@Param("type") String type);
+
+
 }
