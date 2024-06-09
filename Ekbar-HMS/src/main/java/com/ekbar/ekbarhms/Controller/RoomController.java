@@ -43,7 +43,7 @@ public class RoomController {
     }
 
     @PutMapping("/{id}/updatebooking")
-    public ResponseEntity<Room> updateBooking(
+    public ResponseEntity<Room> updateBookingStatus(
             @PathVariable Long id
     )throws Exception{
         Room room = roomService.updateIsBooked(id);
@@ -51,10 +51,10 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Room> getRoomById(
+    public Room getRoomById(
                 @PathVariable Long id
         )throws Exception{
-        Optional<Room> room = roomService.getRoomById(id);
+        Room room = roomService.getRoomById(id);
         return room;
         }
 
@@ -74,6 +74,28 @@ public class RoomController {
         MessageResponse message = new MessageResponse();
         message.setMessage("Deleted successfully");
         return new  ResponseEntity<>(message,HttpStatus.OK);
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<List<Room>> getAvailableRooms(){
+        List<Room> rooms = roomService.getAllAvailableRooms();
+        return new ResponseEntity<>(rooms,HttpStatus.OK);
+    }
+    @GetMapping("/type/available")
+    public ResponseEntity<List<Room>> getAvailableRoomsBySpecificType(
+            @RequestParam String type
+    ){
+        List<Room> rooms = roomService.getAllAvailableRoomsWithSpecificRoomType(type);
+        return new ResponseEntity<>(rooms,HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Room> updateRoom(
+            @RequestBody CreateRoomRequest req,
+            @PathVariable Long id
+    )throws Exception{
+        Room room = roomService.updateRoomDetails(req,id);
+        return new  ResponseEntity<>(room,HttpStatus.OK);
     }
 }
 
