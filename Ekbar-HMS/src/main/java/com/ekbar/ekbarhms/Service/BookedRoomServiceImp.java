@@ -67,12 +67,36 @@ public class BookedRoomServiceImp implements BookedRoomService{
 
     @Override
     public BookedRoom updateBooking(CreateNewBookingRequest req, String bookingConfirmationCode) {
-        return null;
+        BookedRoom booking = getBookedRoomByBookingConfirmationCode(bookingConfirmationCode);
+       if(booking.getGuestEmail()!=null){
+           booking.setGuestEmail(req.getGuestEmail());
+       }
+       if(booking.getCheckOutDate()!=null){
+           booking.setCheckOutDate(req.getCheckOutDate());
+       }
+       if(booking.getCheckOutDate()!=null){
+           booking.setCheckOutDate(req.getCheckOutDate());
+       }
+       if(booking.getGuestFullName()!=null){
+           booking.setGuestFullName(req.getGuestFullName());
+       }
+       booking.setNumOfChildren(req.getNumOfChildren());
+       booking.setNumOfAdults(req.getNumOfAdults());
+       booking.setTotalNumOfGuest(totalNoOfGuests(req.getNumOfAdults(),req.getNumOfChildren()));
+       
+        Optional<Room> roomOptional = roomRepo.findById(req.getRoomId());
+        if (roomOptional.isPresent()) {
+            booking.setRoom(roomOptional.get());
+        } else {
+            throw new IllegalArgumentException("Invalid room ID: " + req.getRoomId());
+        }
+
+        return bookedRoomRepo.save(booking);
     }
 
     @Override
     public BookedRoom getBookedRoomByBookingConfirmationCode(String code) {
-        return null;
+        return bookedRoomRepo.findByBookingConfirmationCode(code);
     }
 
     @Override

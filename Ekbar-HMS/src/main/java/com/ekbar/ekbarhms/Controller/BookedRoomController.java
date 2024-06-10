@@ -9,10 +9,7 @@ import com.ekbar.ekbarhms.Service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/bookings")
@@ -27,5 +24,21 @@ public class BookedRoomController {
             ){
         BookedRoom booking = bookedRoomService.createBooking(req);
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/user/get")
+    public ResponseEntity<BookedRoom> getABookinByBookingConfirmationCode(
+            @RequestParam  String code
+    ){
+        BookedRoom booking = bookedRoomService.getBookedRoomByBookingConfirmationCode(code);
+        return new ResponseEntity<>(booking, HttpStatus.OK);
+    }
+    @PutMapping("/update")
+    public ResponseEntity<BookedRoom> updateABooking(
+            @RequestBody CreateNewBookingRequest req,
+            @RequestParam String code
+    ){
+        BookedRoom booking = bookedRoomService.updateBooking(req, code);
+        return new ResponseEntity<>(booking, HttpStatus.OK);
     }
 }
