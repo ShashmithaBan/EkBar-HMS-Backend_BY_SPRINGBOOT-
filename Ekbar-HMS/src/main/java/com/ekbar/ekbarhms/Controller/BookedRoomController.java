@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/bookings")
 public class BookedRoomController {
@@ -24,6 +26,11 @@ public class BookedRoomController {
             ){
         BookedRoom booking = bookedRoomService.createBooking(req);
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
+    }
+    @GetMapping("/getall")
+    public ResponseEntity<List<BookedRoom>> getAllBookings(){
+        List<BookedRoom> bookings = bookedRoomService.getAllBookedRoom();
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
     @GetMapping("/user/get")
