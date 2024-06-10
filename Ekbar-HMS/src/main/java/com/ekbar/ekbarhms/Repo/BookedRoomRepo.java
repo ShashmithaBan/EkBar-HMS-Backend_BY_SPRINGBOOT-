@@ -17,4 +17,5 @@ public interface BookedRoomRepo extends JpaRepository<BookedRoom,Long> {
             @Param("checkOutDate") LocalDate checkOutDate,
             @Param("checkInDate") LocalDate checkInDate
     );
+    BookedRoom findByBookingConfirmationCode(String bookingConfirmationCode);
 }
