@@ -23,4 +23,6 @@ public interface BookedRoomService {
 
     public boolean checkWhetherTheRoomIsAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate);
 
+    public  void deleteBooking(String bookingConfirmationCode);
+
 }

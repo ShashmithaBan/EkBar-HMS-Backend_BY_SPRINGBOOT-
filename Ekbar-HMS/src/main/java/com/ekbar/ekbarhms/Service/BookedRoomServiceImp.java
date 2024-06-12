@@ -64,6 +64,12 @@ public class BookedRoomServiceImp implements BookedRoomService{
         return bookings.isEmpty();
     }
 
+    @Override
+    public void deleteBooking(String bookingConfirmationCode) {
+        BookedRoom booking = getBookedRoomByBookingConfirmationCode(bookingConfirmationCode);
+        bookedRoomRepo.delete(booking);
+    }
+
 
     @Override
     public BookedRoom updateBooking(CreateNewBookingRequest req, String bookingConfirmationCode) {
@@ -83,13 +89,6 @@ public class BookedRoomServiceImp implements BookedRoomService{
        booking.setNumOfChildren(req.getNumOfChildren());
        booking.setNumOfAdults(req.getNumOfAdults());
        booking.setTotalNumOfGuest(totalNoOfGuests(req.getNumOfAdults(),req.getNumOfChildren()));
-       
-        Optional<Room> roomOptional = roomRepo.findById(req.getRoomId());
-        if (roomOptional.isPresent()) {
-            booking.setRoom(roomOptional.get());
-        } else {
-            throw new IllegalArgumentException("Invalid room ID: " + req.getRoomId());
-        }
 
         return bookedRoomRepo.save(booking);
     }
@@ -101,7 +100,7 @@ public class BookedRoomServiceImp implements BookedRoomService{
 
     @Override
     public List<BookedRoom> getAllBookedRoom() {
-        return null;
+        return bookedRoomRepo.findAll();
     }
 
     @Override
