@@ -64,6 +64,12 @@ public class BookedRoomServiceImp implements BookedRoomService{
         return bookings.isEmpty();
     }
 
+    @Override
+    public void deleteBooking(String bookingConfirmationCode) {
+        BookedRoom booking = getBookedRoomByBookingConfirmationCode(bookingConfirmationCode);
+        bookedRoomRepo.delete(booking);
+    }
+
 
     @Override
     public BookedRoom updateBooking(CreateNewBookingRequest req, String bookingConfirmationCode) {
