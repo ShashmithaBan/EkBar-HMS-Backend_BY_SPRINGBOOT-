@@ -39,7 +39,7 @@ public class RoomController {
     @GetMapping("")
     public ResponseEntity<List<Room>> getAllRooms() throws Exception {
         List<Room> room = roomService.getAllRooms();
-        return new  ResponseEntity<>(room,HttpStatus.OK);
+        return new ResponseEntity<>(room,HttpStatus.OK);
     }
 
     @PutMapping("/{id}/updatebooking")

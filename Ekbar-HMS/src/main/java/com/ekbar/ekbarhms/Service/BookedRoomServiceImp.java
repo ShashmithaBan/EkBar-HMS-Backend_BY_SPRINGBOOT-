@@ -22,20 +22,41 @@ public class BookedRoomServiceImp implements BookedRoomService{
     public RoomRepo roomRepo;
 
     @Autowired
+    public RoomService roomService;
+
+    @Autowired
     public BookedRoomRepo bookedRoomRepo;
 
-    public BookedRoom createBooking(CreateNewBookingRequest req) {
+    public BookedRoom createOrUpdateBooking(CreateNewBookingRequest req) {
+        // Check if the room is available for the given time range
         if (checkWhetherTheRoomIsAvailable(req.getRoomId(), req.getCheckInDate(), req.getCheckOutDate())) {
-            BookedRoom booking = new BookedRoom();
+            Optional<BookedRoom> existingBookingOptional = bookedRoomRepo.findByRoomIdAndDateRange(
+                    req.getRoomId(),
+                    req.getCheckInDate(),
+                    req.getCheckOutDate()
+            );
+
+            BookedRoom booking;
+            if (existingBookingOptional.isPresent()) {
+                // Update existing booking
+                booking = existingBookingOptional.get();
+            } else {
+                // Create a new booking
+                booking = new BookedRoom();
+                booking.setBookingConfirmationCode(generateUniqueCode());
+                roomService.updateIsBooked(req.getRoomId());
+            }
+
+            // Set booking details
             booking.setCheckInDate(req.getCheckInDate());
             booking.setCheckOutDate(req.getCheckOutDate());
-            booking.setBookingConfirmationCode(generateUniqueCode());
             booking.setGuestEmail(req.getGuestEmail());
             booking.setGuestFullName(req.getGuestFullName());
             booking.setNumOfAdults(req.getNumOfAdults());
             booking.setNumOfChildren(req.getNumOfChildren());
             booking.setTotalNumOfGuest(totalNoOfGuests(req.getNumOfAdults(), req.getNumOfChildren()));
 
+            // Set room details
             Optional<Room> roomOptional = roomRepo.findById(req.getRoomId());
             if (roomOptional.isPresent()) {
                 booking.setRoom(roomOptional.get());
@@ -43,11 +64,14 @@ public class BookedRoomServiceImp implements BookedRoomService{
                 throw new IllegalArgumentException("Invalid room ID: " + req.getRoomId());
             }
 
+            // Save and return the booking
             return bookedRoomRepo.save(booking);
+
         } else {
             throw new IllegalArgumentException("Room with ID " + req.getRoomId() + " is already booked for the selected dates.");
         }
     }
+
 
     public boolean checkWhetherTheRoomIsAvailable(Long roomId, LocalDate checkInDate, LocalDate checkOutDate) {
         Optional<Room> roomOptional = roomRepo.findById(roomId);

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface BookedRoomRepo extends JpaRepository<BookedRoom,Long> {
 
@@ -18,4 +19,15 @@ public interface BookedRoomRepo extends JpaRepository<BookedRoom,Long> {
             @Param("checkInDate") LocalDate checkInDate
     );
     BookedRoom findByBookingConfirmationCode(String bookingConfirmationCode);
+
+    @Query("SELECT br FROM BookedRoom br WHERE br.room.id = :roomId AND " +
+            "((:checkInDate BETWEEN br.checkInDate AND br.checkOutDate) OR " +
+            "(:checkOutDate BETWEEN br.checkInDate AND br.checkOutDate) OR " +
+            "(br.checkInDate BETWEEN :checkInDate AND :checkOutDate) OR " +
+            "(br.checkOutDate BETWEEN :checkInDate AND :checkOutDate))")
+    Optional<BookedRoom> findByRoomIdAndDateRange(
+            @Param("roomId") Long roomId,
+            @Param("checkInDate") LocalDate checkInDate,
+            @Param("checkOutDate") LocalDate checkOutDate
+    );
 }
