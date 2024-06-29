@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BookedRoomService {
 
-    public BookedRoom createBooking(CreateNewBookingRequest req);
+    public BookedRoom createOrUpdateBooking(CreateNewBookingRequest req);
 
     public BookedRoom updateBooking(CreateNewBookingRequest req , String bookingConfirmationCode);
 

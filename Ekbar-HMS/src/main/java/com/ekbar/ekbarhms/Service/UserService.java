@@ -17,4 +17,6 @@ public interface UserService {
     public AuthResponse updateAdmin(updateAdminRequest req , Long id);
 
 
-}
+
+
+ }

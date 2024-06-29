@@ -25,7 +25,7 @@ public class BookedRoomController {
     public ResponseEntity<BookedRoom> createABooking(
             @RequestBody CreateNewBookingRequest req
             ){
-        BookedRoom booking = bookedRoomService.createBooking(req);
+        BookedRoom booking = bookedRoomService.createOrUpdateBooking(req);
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
     }
     @GetMapping("/getall")
