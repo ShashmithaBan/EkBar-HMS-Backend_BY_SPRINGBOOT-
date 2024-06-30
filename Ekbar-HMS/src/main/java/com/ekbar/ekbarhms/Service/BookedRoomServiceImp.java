@@ -47,7 +47,7 @@ public class BookedRoomServiceImp implements BookedRoomService{
                 roomService.updateIsBooked(req.getRoomId());
             }
 
-            // Set booking details
+
             booking.setCheckInDate(req.getCheckInDate());
             booking.setCheckOutDate(req.getCheckOutDate());
             booking.setGuestEmail(req.getGuestEmail());
@@ -56,7 +56,7 @@ public class BookedRoomServiceImp implements BookedRoomService{
             booking.setNumOfChildren(req.getNumOfChildren());
             booking.setTotalNumOfGuest(totalNoOfGuests(req.getNumOfAdults(), req.getNumOfChildren()));
 
-            // Set room details
+
             Optional<Room> roomOptional = roomRepo.findById(req.getRoomId());
             if (roomOptional.isPresent()) {
                 booking.setRoom(roomOptional.get());
@@ -64,7 +64,7 @@ public class BookedRoomServiceImp implements BookedRoomService{
                 throw new IllegalArgumentException("Invalid room ID: " + req.getRoomId());
             }
 
-            // Save and return the booking
+
             return bookedRoomRepo.save(booking);
 
         } else {

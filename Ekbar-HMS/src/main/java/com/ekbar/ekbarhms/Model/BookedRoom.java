@@ -1,5 +1,6 @@
 package com.ekbar.ekbarhms.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +43,7 @@ public class BookedRoom {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
+    @JsonBackReference
     private Room room;
 
 }
