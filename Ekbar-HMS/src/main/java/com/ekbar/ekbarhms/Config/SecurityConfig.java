@@ -1,6 +1,5 @@
 package com.ekbar.ekbarhms.Config;
 
-
 import com.ekbar.ekbarhms.Filter.JwtAuthenticationFilter;
 import com.ekbar.ekbarhms.Service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -53,8 +51,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         req -> req
-                                .requestMatchers("/api/auth/login/**", "/api/auth/register/**")
-                                .permitAll()
+                                .requestMatchers("/api/auth/login/**", "/api/auth/register/**", "/", "/api/rooms/**")
+                                .permitAll() // Allow access to room endpoints for all users
                                 .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                                 .anyRequest()
                                 .authenticated()

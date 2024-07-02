@@ -5,10 +5,12 @@ import com.ekbar.ekbarhms.Model.User;
 import com.ekbar.ekbarhms.Repo.UserRepository;
 import com.ekbar.ekbarhms.Response.AuthenticationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Service
 public class AuthenticationService {
@@ -60,5 +62,9 @@ public class AuthenticationService {
         authenticationResponse.setMessage("Login Success");
 
         return authenticationResponse ;
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok().body("Logout successful");
     }
 }
