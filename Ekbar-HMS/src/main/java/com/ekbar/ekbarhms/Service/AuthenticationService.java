@@ -1,17 +1,14 @@
 package com.ekbar.ekbarhms.Service;
 
+
 import com.ekbar.ekbarhms.Model.User;
 import com.ekbar.ekbarhms.Repo.UserRepository;
-
 import com.ekbar.ekbarhms.Response.AuthenticationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
 
 @Service
 public class AuthenticationService {
